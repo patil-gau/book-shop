@@ -1,5 +1,5 @@
 const Book = require("../../models/Book");
-
+const { deleteKey } = require("../../services/redis");
 // Delete a book by ID
 async function deleteBookById(req, res) {
   try {
@@ -23,9 +23,15 @@ async function deleteBookById(req, res) {
       throw new Error("Book not found!");
     }
 
+    //clear redis key of deleted book
+    //bookById used in getBookById
+    // await deleteKey(`bookById-id-${id}`);
+    // //bookByTitle-title used during time of new book creation
+    // await deleteKey(`bookByTitle-title-${title}`);
+
     return res.status(200).json({
       success: true,
-      message: `Successfully Updated Book ${book.title}`,
+      message: `Successfully Deleted Book ${book.title}`,
     });
   } catch (error) {
     return res.status(400).json({ error: error.message, status: false });

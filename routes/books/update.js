@@ -10,12 +10,14 @@ async function updateBookById(req, res, next) {
       throw new Error("Id is required");
     }
 
-    if (!(author || title)) {
+    if (!(author && title)) {
       throw new Error("Author and Title are required");
     }
 
     condition._id = id;
-    const book = await Book.findByIdAndUpdate(condition, req.body, {
+
+    req.body.modifiedAt = new Date();
+    const book = await Book.findOneAndUpdate(condition, req.body, {
       new: true,
     });
     if (!book) {

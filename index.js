@@ -1,6 +1,5 @@
 //npm module
 const express = require("express");
-const bodyParser = require("body-parser");
 require("dotenv").config();
 
 //app modules
@@ -15,7 +14,9 @@ const app = express();
 
 //set a rate time to stop bruteforce attacks
 app.use(limiter);
+//parse request body payload
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //make db Connection
 connectToDB();
@@ -23,4 +24,6 @@ connectToDB();
 app.get("/", (req, res) => res.send("Welcome to Book Shop"));
 app.use("/api/v1", routes);
 
-app.listen(port, () => console.log(`Book Shop App Running on PORT ${port}!`));
+app.listen(port, () =>
+  console.log(`[SUCCESS] Book Shop App Running on PORT ${port}!`)
+);

@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const { verifyToken } = require("../../middlewares/auth/verify-token");
-router.use(verifyToken);
-
-// ****** AUTHENTICATION  ******** //
+// ****** AUTH  ******** //
 const { login } = require("./auth/login");
 router.post("/login", login);
-// ****** AUTHENTICATION ******** //
+// ****** AUTH ******** //
+
+// ****** TOKEN VERIFICATION ******** //
+const { verifyToken } = require("../middlewares/auth/verify-token");
+router.use(verifyToken);
+// ****** TOKEN VERIFICATION ******** //
 
 // ****** BOOK management ******** //
 const { createBook } = require("./books/create");
@@ -18,7 +20,7 @@ const { deleteBookById } = require("./books/delete");
 router.post("/book", createBook);
 router.put("/book/:id", updateBookById);
 router.get("/book/:id", getBookById);
-router.get("/book", getAllBooks);
+router.get("/books", getAllBooks);
 router.delete("/book/:id", deleteBookById);
 // ****** BOOK management ******** //
 

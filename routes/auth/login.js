@@ -1,7 +1,7 @@
-const jwt = require("jwt");
+const jwt = require("jsonwebtoken");
 
 const User = require("../../models/User");
-const { SECRET_KEY } = process.env;
+const { SECRET } = process.env;
 
 async function login(req, res, next) {
   const { email, password } = req.body;
@@ -10,7 +10,7 @@ async function login(req, res, next) {
       throw new Error("Email and Password are required!");
     }
 
-    const user = await User.findOne({ email, isActive: true });
+    const user = await User.findOne({ email, isActive: true }).lean();
     if (!user) {
       throw new Error("Invalid username or password");
     }
@@ -25,13 +25,9 @@ async function login(req, res, next) {
     }
 
     // Create a JWT token for the authenticated user
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      SECRET_KEY,
-      {
-        expiresIn: "8h",
-      }
-    );
+    const token = jwt.sign({ userId: user._id, email: user.email }, SECRET, {
+      expiresIn: "8h",
+    });
 
     return res
       .status(200)

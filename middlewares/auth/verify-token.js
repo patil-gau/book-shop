@@ -1,18 +1,17 @@
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = process.env;
+const { SECRET } = process.env;
 
 const verifyToken = (req, res, next) => {
   try {
     const token =
-      req.header("Authorization").split(" ")[1] ||
-      req.header.token ||
+      req.header("Authorization")?.split(" ")[1] ||
+      req.headers.token ||
       req.params.token;
-
     if (!token) {
       throw new Error("Token is required");
     }
 
-    const decoded = jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, SECRET);
 
     req.userInfo = decoded;
 

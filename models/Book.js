@@ -6,16 +6,16 @@ const bookSchema = new mongoose.Schema(
       type: String,
       required: true,
       maxlength: 100,
-      index: true,
+      unique: true,
     },
     author: {
       type: String,
       required: true,
       maxlength: 50,
-      index: true,
     },
     publishedYear: {
       type: Number,
+      default: null,
     },
     genre: {
       type: String,
@@ -53,7 +53,7 @@ const bookSchema = new mongoose.Schema(
 );
 
 //add indexes to most searchable keys -> compound index
-bookSchema.createIndex({ title: 1, author: 1, publishedYear: 1 });
+bookSchema.index({ title: 1, author: 1 });
 
 const Book = mongoose.model("Book", bookSchema);
 

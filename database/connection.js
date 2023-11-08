@@ -17,7 +17,7 @@ function connectToDB() {
     process.exit(0);
   });
   db.once("open", () => {
-    console.log("[INFO] Connected to MongoDB database");
+    console.log("[SUCCESS] Connected to MongoDB database");
   });
 }
 

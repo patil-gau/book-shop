@@ -17,7 +17,9 @@ const delAsync = promisify(client.del).bind(client);
 async function connectToRedis() {
   try {
     await client.connect();
+    console.log("[SUCCESS] Redis Connected");
   } catch (err) {
+    console.log(`[ERROR] Error Connecting to Redis. Retrying ${RETRY_COUNT}/5`);
     RETRY_COUNT++;
     if (RETRY_COUNT < 5) {
       connectToRedis();
@@ -31,12 +33,9 @@ connectToRedis();
 const setKey = async (key, value, expirationSeconds = 30 * 60) => {
   try {
     const serializedValue = JSON.stringify(value);
-    await setAsync(key, serializedValue);
-    if (expirationSeconds > 0) {
-      await expireAsync(key, expirationSeconds);
-    }
+    await setAsync(key, serializedValue, { EX: expirationSeconds });
   } catch (error) {
-    console.error("Redis set error:", error);
+    console.error("[ERROR] Redis set error:", error);
   }
 };
 
@@ -48,7 +47,7 @@ const getKey = async (key) => {
     }
     return null;
   } catch (error) {
-    console.error("Redis get error:", error);
+    console.error("[ERROR] Redis get error:", error);
     return null;
   }
 };
@@ -57,12 +56,12 @@ const deleteKey = async (key) => {
   try {
     const reply = await delAsync(key);
     if (reply === 1) {
-      console.log("Key deleted");
+      console.log("[INFO] Key deleted");
     } else {
-      console.log("Key not found");
+      console.log("[INFO] Key not found");
     }
   } catch (error) {
-    console.error("Redis delete error:", error);
+    console.error("[ERROR] Redis delete error:", error);
   }
 };
 
