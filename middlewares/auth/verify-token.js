@@ -18,8 +18,8 @@ const verifyToken = (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(400).json({ message: error.message, status: 0 });
+    return res.status(400).json({ message: error.message, status: false });
   }
 };
 
-module.exports = verifyToken;
+module.exports = { verifyToken };
