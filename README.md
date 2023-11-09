@@ -73,3 +73,11 @@ Before getting started, make sure you have the following installed:
 - **`/book/:id` (DELETE)**: Delete a book by ID.
 - **`/book/:id` (PUT)**: Update a book by ID.
 - **`/books` (GET)**: Get a list of books in a paginated form.
+
+# Node.js App Deployed on Heroku
+
+This Node.js application is deployed on the Heroku server and can be accessed through the following base URL:
+
+[https://bookshopapp-9a6e6d7ccd7b.herokuapp.com](https://bookshopapp-9a6e6d7ccd7b.herokuapp.com)
+
+Feel free to explore the features and functionalities of the Book Shop application!
