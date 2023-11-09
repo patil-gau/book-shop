@@ -1,9 +1,8 @@
 const redis = require("redis");
 
-const REDIS_HOST = process.env.REDIS_HOST || "127.0.0.1";
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
-let RETRY_COUNT = 0;
+const { ENABLE_REDIS, REDIS_HOST, REDIS_PORT } = process.env;
 
+let RETRY_COUNT = 0;
 const client = redis.createClient({
   socket: { host: REDIS_HOST, port: REDIS_PORT },
 });
@@ -11,7 +10,7 @@ const client = redis.createClient({
 async function connectToRedis() {
   try {
     await client.connect();
-    console.log("[SUCCESS] Redis Connected");
+    console.log("[SUCCESS] Redis Connected!");
   } catch (err) {
     console.log(`[ERROR] Error Connecting to Redis. Retrying ${RETRY_COUNT}/2`);
     RETRY_COUNT++;
@@ -22,7 +21,10 @@ async function connectToRedis() {
 }
 
 //make connection with redis
-connectToRedis();
+if (ENABLE_REDIS === "true") {
+  console.log("[INFO] Redis Enabled for the App");
+  connectToRedis();
+}
 
 const setKey = async (key, value, expirationSeconds = 30 * 60) => {
   try {

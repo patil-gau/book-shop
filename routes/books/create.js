@@ -1,5 +1,6 @@
 const Book = require("../../models/Book");
 const { getKey, setKey } = require("../../services/redis");
+const { ENABLE_REDIS } = process.env;
 async function createBook(req, res, next) {
   try {
     const { title, author } = req.body;
@@ -8,16 +9,22 @@ async function createBook(req, res, next) {
       throw new Error("Title and Author are required");
     }
 
-    //check if the book title already exists
-    // const isBookExistRedisKey = `bookByTitle-title-${title}`;
-    // let isBookExist = await getKey(isBookExistRedisKey);
-    // if (!isBookExist) {
-    isBookExist = await Book.findOne({ title, isActive: true });
-    if (isBookExist) {
-      throw new Error("Book Title Already Exists");
+    //check if the book title already
+    let isBookExist;
+    if (ENABLE_REDIS === "true") {
+      const isBookExistRedisKey = `bookByTitle-title-${title}`;
+      isBookExist = await getKey(isBookExistRedisKey);
     }
-    // await setKey(isBookExistRedisKey, isBookExist); //30 minutes by default
-    // }
+
+    if (!isBookExist) {
+      isBookExist = await Book.findOne({ title, isActive: true });
+      if (isBookExist) {
+        throw new Error("Book Title Already Exists");
+      }
+
+      ENABLE_REDIS === "true" &&
+        (await setKey(isBookExistRedisKey, isBookExist)); //30 minutes by default
+    }
 
     //only keys defined in schema will be saved as strict mode is on
     const bookInstance = new Book(req.body);

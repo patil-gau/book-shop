@@ -1,5 +1,7 @@
 const Book = require("../../models/Book");
 const { deleteKey } = require("../../services/redis");
+const { ENABLE_REDIS } = process.env;
+
 // Delete a book by ID
 async function deleteBookById(req, res) {
   try {
@@ -24,10 +26,12 @@ async function deleteBookById(req, res) {
     }
 
     // clear redis key of deleted book
-    // bookById used in getBookById
-    await deleteKey(`bookById-id-${id}`);
-    //bookByTitle-title used during time of new book creation
-    await deleteKey(`bookByTitle-title-${book.title}`);
+    if (ENABLE_REDIS === "true") {
+      // bookById used in getBookById
+      await deleteKey(`bookById-id-${id}`);
+      //bookByTitle-title used during time of new book creation
+      await deleteKey(`bookByTitle-title-${book.title}`);
+    }
 
     return res.status(200).json({
       success: true,

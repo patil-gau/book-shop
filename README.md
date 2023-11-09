@@ -19,7 +19,7 @@ Book Shop is a simple CRUD (Create, Read, Update, Delete) application for book m
 
 3. **Pagination**: Enable paginated results to efficiently display a large number of books, enhancing the user experience.
 
-4. **Redis Caching**: Utilize Redis caching to improve API response times and reduce the load on the MongoDB database.
+4. **Redis Caching**: Utilize Redis caching to improve API response times and reduce the load on the MongoDB database. Implemented Redis using Feature Flagging Can be Enabled/Disabled from ENV
 
 5. **Indexing**: Apply database indexing to optimize query performance for common fields, making searches faster.
 
@@ -54,6 +54,7 @@ Before getting started, make sure you have the following installed:
    REDIS_HOST=redis-host
    REDIS_PORT=redis-port
    ENVIRONMENT=staging
+   ENABLE_REDIS=false
 
 5. **Start Application**:
    npm start
