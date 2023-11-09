@@ -55,9 +55,9 @@ async function getAllBooks(req, res, next) {
       modifiedAt: 0,
       createdAt: 0,
     })
+      .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit)
-      .sort({ createdAt: -1 });
+      .limit(limit);
 
     if (!books?.length) {
       throw new Error("No books found!");
