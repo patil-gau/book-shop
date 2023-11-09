@@ -1,9 +1,8 @@
 const redis = require("redis");
-const { promisify } = require("util");
 
 const REDIS_HOST = process.env.REDIS_HOST || "127.0.0.1";
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
-const RETRY_COUNT = 0;
+let RETRY_COUNT = 0;
 
 const client = redis.createClient({
   socket: { host: REDIS_HOST, port: REDIS_PORT },
@@ -14,9 +13,9 @@ async function connectToRedis() {
     await client.connect();
     console.log("[SUCCESS] Redis Connected");
   } catch (err) {
-    console.log(`[ERROR] Error Connecting to Redis. Retrying ${RETRY_COUNT}/5`);
+    console.log(`[ERROR] Error Connecting to Redis. Retrying ${RETRY_COUNT}/2`);
     RETRY_COUNT++;
-    if (RETRY_COUNT < 5) {
+    if (RETRY_COUNT < 2) {
       connectToRedis();
     }
   }
