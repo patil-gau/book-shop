@@ -37,7 +37,7 @@ async function updateBookById(req, res, next) {
       .status(200)
       .json({ status: true, message: "Successfully Updated", data: book });
   } catch (error) {
-    return res.status(400).json({ error: error.message, status: false });
+    return res.status(400).json({ message: error.message, status: false });
   }
 }
 

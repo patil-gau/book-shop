@@ -38,7 +38,7 @@ async function deleteBookById(req, res) {
       message: `Successfully Deleted Book ${book.title}`,
     });
   } catch (error) {
-    return res.status(400).json({ error: error.message, status: false });
+    return res.status(400).json({ message: error.message, status: false });
   }
 }
 

@@ -69,7 +69,7 @@ async function getAllBooks(req, res, next) {
       total,
     });
   } catch (error) {
-    return res.status(400).json({ error: error.message, success: false });
+    return res.status(400).json({ message: error.message, success: false });
   }
 }
 
