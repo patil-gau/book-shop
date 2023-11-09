@@ -23,11 +23,11 @@ async function deleteBookById(req, res) {
       throw new Error("Book not found!");
     }
 
-    //clear redis key of deleted book
-    //bookById used in getBookById
-    // await deleteKey(`bookById-id-${id}`);
-    // //bookByTitle-title used during time of new book creation
-    // await deleteKey(`bookByTitle-title-${title}`);
+    // clear redis key of deleted book
+    // bookById used in getBookById
+    await deleteKey(`bookById-id-${id}`);
+    //bookByTitle-title used during time of new book creation
+    await deleteKey(`bookByTitle-title-${book.title}`);
 
     return res.status(200).json({
       success: true,

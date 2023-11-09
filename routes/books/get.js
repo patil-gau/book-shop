@@ -8,16 +8,16 @@ async function getBookById(req, res, next) {
 
     condition._id = req.params.id;
 
-    // const cacheKey = `bookById-id-${req.params.id}`;
+    const cacheKey = `bookById-id-${req.params.id}`;
 
-    // const cachedBook = await getKey(cacheKey);
-    // if (cachedBook) {
-    //   return res.status(200).json({
-    //     status: true,
-    //     message: "Successfully fetched",
-    //     data: cachedBook,
-    //   });
-    // }
+    const cachedBook = await getKey(cacheKey);
+    if (cachedBook) {
+      return res.status(200).json({
+        status: true,
+        message: "Successfully fetched",
+        data: cachedBook,
+      });
+    }
     const book = await Book.findOne(condition, {
       __v: 0,
       modifiedAt: 0,
@@ -26,7 +26,7 @@ async function getBookById(req, res, next) {
     if (!book) {
       throw new Error("Book not found");
     }
-    // await setKey(cacheKey, book); //30 minutes by default
+    await setKey(cacheKey, book); //30 minutes by default
     return res
       .status(200)
       .json({ status: true, message: "Successfully fetched", data: book });

@@ -52,8 +52,8 @@ const bookSchema = new mongoose.Schema(
   }
 );
 
-//add indexes to most searchable keys -> compound index
-bookSchema.index({ title: 1, author: 1 });
+//add indexes to most searchable keys
+bookSchema.index({ title: 1 });
 
 const Book = mongoose.model("Book", bookSchema);
 

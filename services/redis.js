@@ -9,11 +9,6 @@ const client = redis.createClient({
   socket: { host: REDIS_HOST, port: REDIS_PORT },
 });
 
-// Promisify Redis client methods
-const setAsync = promisify(client.set).bind(client);
-const getAsync = promisify(client.get).bind(client);
-const delAsync = promisify(client.del).bind(client);
-
 async function connectToRedis() {
   try {
     await client.connect();
@@ -33,7 +28,7 @@ connectToRedis();
 const setKey = async (key, value, expirationSeconds = 30 * 60) => {
   try {
     const serializedValue = JSON.stringify(value);
-    await setAsync(key, serializedValue, { EX: expirationSeconds });
+    await client.set(key, serializedValue, { EX: expirationSeconds });
   } catch (error) {
     console.error("[ERROR] Redis set error:", error);
   }
@@ -41,7 +36,8 @@ const setKey = async (key, value, expirationSeconds = 30 * 60) => {
 
 const getKey = async (key) => {
   try {
-    const serializedValue = await getAsync(key);
+    console.log("Key", key);
+    const serializedValue = await client.get(key);
     if (serializedValue) {
       return JSON.parse(serializedValue);
     }
@@ -54,12 +50,7 @@ const getKey = async (key) => {
 
 const deleteKey = async (key) => {
   try {
-    const reply = await delAsync(key);
-    if (reply === 1) {
-      console.log("[INFO] Key deleted");
-    } else {
-      console.log("[INFO] Key not found");
-    }
+    await client.del(key);
   } catch (error) {
     console.error("[ERROR] Redis delete error:", error);
   }
