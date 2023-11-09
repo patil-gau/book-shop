@@ -17,6 +17,7 @@ app.use(limiter);
 //parse request body payload
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", true);
 
 //make db Connection
 connectToDB();

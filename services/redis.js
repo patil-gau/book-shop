@@ -37,7 +37,6 @@ const setKey = async (key, value, expirationSeconds = 30 * 60) => {
 
 const getKey = async (key) => {
   try {
-    console.log("Key", key);
     const serializedValue = await client.get(key);
     if (serializedValue) {
       return JSON.parse(serializedValue);

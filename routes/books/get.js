@@ -8,8 +8,8 @@ async function getBookById(req, res, next) {
 
     condition._id = req.params.id;
 
+    const cacheKey = `bookById-id-${req.params.id}`;
     if (ENABLE_REDIS === "true") {
-      const cacheKey = `bookById-id-${req.params.id}`;
       const cachedBook = await getKey(cacheKey);
       if (cachedBook) {
         return res.status(200).json({
